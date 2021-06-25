@@ -1,0 +1,46 @@
+{
+  "name": "wip-state-manager",
+  "version": "0.0.0",
+  "main": "main.js",
+  "exports": {
+    ".": "./main.js"
+  },
+  "scripts": {
+    "start": "npx @web/dev-server --open --watch"
+  },
+  "peerDependencies": {
+    "react": "*",
+    "react-dom": "*"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^4.18.0",
+    "@typescript-eslint/parser": "^4.18.0",
+    "babel-eslint": "^10.1.0",
+    "eslint": "^7.22.0",
+    "eslint-config-react-app": "^6.0.0",
+    "eslint-plugin-flowtype": "^5.4.0",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-jsx-a11y": "^6.4.1",
+    "eslint-plugin-react": "^7.22.0",
+    "eslint-plugin-react-hooks": "^4.2.0"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "prettier": {
+    "printWidth": 100
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vuoro/sahti.git"
+  },
+  "keywords": [
+    "state"
+  ],
+  "bugs": {
+    "url": "https://github.com/vuoro/sahti/issues"
+  },
+  "homepage": "https://github.com/vuoro/sahti#readme",
+  "author": "Joni Korpi <me@jonikorpi.com>",
+  "license": "MIT"
+}
