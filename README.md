@@ -1,3 +1,5 @@
+# Haltia
+
 Experimental state manager. Extends `Map` and `Set`, making them reactive.
 
 ```js
@@ -41,3 +43,8 @@ export const useHaltia = (haltiaMapOrSet) => {
 const stateSubscription = useHaltia(state);
 stateSubscription.get("number"); // your useHaltia hook will now re-render whenever `number` changes
 ```
+
+## Contributors
+
+- https://twitter.com/jonikorpi/
+- https://twitter.com/VirtanenS (library name)
