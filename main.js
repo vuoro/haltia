@@ -63,6 +63,11 @@ export class HaltiaMap extends Map {
         actualThis.subMap.get(key).add(sub);
         return actualThis.get(key);
       },
+      has: (key) => {
+        if (!actualThis.subMap.has(key)) actualThis.subMap.set(key, new Set());
+        actualThis.subMap.get(key).add(sub);
+        return actualThis.has(key);
+      },
       set: (key, value) => actualThis.set(key, value),
       delete: (key) => actualThis.delete(key),
       clear: () => actualThis.clear(),
@@ -72,6 +77,11 @@ export class HaltiaMap extends Map {
         }
         actualThis.sizeSubs.delete(sub);
       },
+      [Symbol.iterator]: () => actualThis[Symbol.iterator](),
+      keys: () => actualThis.keys(),
+      values: () => actualThis.values(),
+      entries: () => actualThis.entries(),
+      forEach: (callback, thisArg) => actualThis.forEach(callback, thisArg),
     };
 
     this.subscriptions.set(sub, subscription);
