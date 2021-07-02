@@ -3,7 +3,7 @@
 Experimental state manager. Extends `Map` and `Set`, making them reactive.
 
 ```js
-import { HaltiaMap, HaltiaSet } from "./main.js";
+import { HaltiaMap, HaltiaSet } from "@vuoro/haltia";
 
 // These work just like native JS Map and Set
 const state = new HaltiaMap({ number: 0 });
@@ -41,7 +41,7 @@ export const useHaltia = (haltiaMapOrSet) => {
 };
 
 const stateSubscription = useHaltia(state);
-stateSubscription.get("number"); // your useHaltia hook will now re-render whenever `number` changes
+stateSubscription.get("number"); // your hook will now re-render whenever `number` changes
 ```
 
 ## Contributors
