@@ -36,7 +36,7 @@ list.subscribe((list) => console.log([...list].join(", ")));
 export const useHaltia = (haltiaMapOrSet) => {
   const [, setState] = useState(haltiaMapOrSet);
   const subscription = useMemo(() => haltiaMapOrSet.subscribe(setState), [haltiaMapOrSet]);
-  useEffect(() => () => subscription.unsubscribe(), [subscription]);
+  useEffect(() => subscription.unsubscribe, [subscription]);
   return subscription;
 };
 
