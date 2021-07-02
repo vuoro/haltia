@@ -41,7 +41,7 @@ export const useHaltia = (haltiaMapOrSet) => {
 };
 
 const stateSubscription = useHaltia(state);
-stateSubscription.get("number"); // your useHaltia hook will now re-render whenever `number` changes
+stateSubscription.get("number"); // your hook will now re-render whenever `number` changes
 ```
 
 ## Contributors
