@@ -1,6 +1,6 @@
 import { useState, useMemo, useEffect } from "react";
 
-export { HaltiaMap, HaltiaSet } from "./main.js";
+export { Map, Set } from "./main.js";
 
 export const useHaltia = (mapOrSet) => {
   const [, setState] = useState(mapOrSet);
