@@ -1,16 +1,16 @@
 {
-  "name": "wip-state-manager",
+  "name": "haltia",
   "version": "0.0.0",
   "main": "main.js",
   "exports": {
-    ".": "./main.js"
+    ".": "./main.js",
+    "./react": "./main.react.js"
   },
   "scripts": {
     "start": "npx @web/dev-server --open --watch"
   },
   "peerDependencies": {
-    "react": "*",
-    "react-dom": "*"
+    "react": "*"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^4.18.0",
@@ -32,15 +32,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/vuoro/sahti.git"
+    "url": "git+https://github.com/vuoro/haltia.git"
   },
   "keywords": [
     "state"
   ],
   "bugs": {
-    "url": "https://github.com/vuoro/sahti/issues"
+    "url": "https://github.com/vuoro/haltia/issues"
   },
-  "homepage": "https://github.com/vuoro/sahti#readme",
+  "homepage": "https://github.com/vuoro/haltia#readme",
   "author": "Joni Korpi <me@jonikorpi.com>",
   "license": "MIT"
 }

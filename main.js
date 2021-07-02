@@ -16,53 +16,112 @@ const performRequest = () => {
 };
 
 export class ReactiveMap extends Map {
-  subs = new Set();
-  callSubs = () => {
-    for (const subscriber of this.subs) {
-      subscriber(this);
-    }
-  };
-
   constructor(input) {
     const seemsIterable = input != null && typeof input[Symbol.iterator] === "function";
     const maybeAnObject = typeof input === "object";
     super(seemsIterable ? input : maybeAnObject ? Object.entries(input) : input);
   }
 
-  set(key, input, immediate) {
-    super.set(key, input);
-    if (immediate) {
-      this.callSubs();
-    } else {
+  set(key, value) {
+    super.set(key, value);
+    this.changedKeys?.add(key);
+    request(this.callSubs);
+  }
+  delete(key) {
+    if (this.has(key)) {
+      super.delete(key);
+      this.changedKeys?.add(key);
       request(this.callSubs);
     }
   }
-  delete(input, immediate) {
-    super.delete(input);
-    if (immediate) {
-      this.callSubs();
-    } else {
-      request(this.callSubs);
-    }
-  }
-  clear(immediate) {
-    super.clear();
-    if (immediate) {
-      this.callSubs();
-    } else {
+  clear() {
+    if (this.size > 0) {
+      super.clear();
+      for (const key of this.keys()) {
+        this.changedKeys.add(key);
+      }
       request(this.callSubs);
     }
   }
 
-  subscribe(input) {
-    this.subs.add(input);
+  subMap = new Map();
+  sizeSubs = new Set();
+  changedKeys = new Set();
+  queue = new Set();
+  subscriptions = new Map();
+
+  subscribe(sub) {
+    const actualThis = this;
+
+    const subscription = {
+      get size() {
+        actualThis.sizeSubs.add(sub);
+        return actualThis.size;
+      },
+      get: (key) => {
+        if (!actualThis.subMap.has(key)) actualThis.subMap.set(key, new Set());
+        actualThis.subMap.get(key).add(sub);
+        return actualThis.get(key);
+      },
+      set: (key, value) => actualThis.set(key, value),
+      delete: (key) => actualThis.delete(key),
+      clear: () => actualThis.clear(),
+      unsubscribe: () => {
+        for (const [, subs] of actualThis.subMap) {
+          subs.delete(sub);
+        }
+        actualThis.sizeSubs.delete(sub);
+      },
+    };
+
+    this.subscriptions.set(sub, subscription);
+
+    return subscription;
   }
-  unsubscribe(input) {
-    this.subs.delete(input);
-  }
+
+  callSubs = () => {
+    for (const key of this.changedKeys) {
+      const subs = this.subMap.get(key);
+      if (subs) {
+        for (const sub of subs) {
+          this.queue.add(sub);
+        }
+      }
+    }
+
+    for (const sub of this.sizeSubs) {
+      this.queue.add(sub);
+    }
+
+    for (const sub of this.queue) {
+      sub(this.subscriptions.get(sub));
+    }
+
+    this.changedKeys.clear();
+    this.queue.clear();
+  };
 }
 
 export class ReactiveSet extends Set {
+  add(value) {
+    if (!this.has(value)) {
+      super.add(value);
+      request(this.callSubs);
+    }
+  }
+  delete(value) {
+    if (this.has(value)) {
+      super.delete(value);
+      request(this.callSubs);
+    }
+  }
+  clear() {
+    if (this.size > 0) {
+      super.clear();
+      request(this.callSubs);
+    }
+  }
+
   subs = new Set();
   callSubs = () => {
     for (const subscriber of this.subs) {
@@ -70,35 +129,11 @@ export class ReactiveSet extends Set {
     }
   };
 
-  add(input, immediate) {
-    super.add(input);
-    if (immediate) {
-      this.callSubs();
-    } else {
-      request(this.callSubs);
-    }
+  subscribe(sub) {
+    this.subs.add(sub);
+    return this;
   }
-  delete(input, immediate) {
-    super.delete(input);
-    if (immediate) {
-      this.callSubs();
-    } else {
-      request(this.callSubs);
-    }
-  }
-  clear(immediate) {
-    super.clear();
-    if (immediate) {
-      this.callSubs();
-    } else {
-      request(this.callSubs);
-    }
-  }
-
-  subscribe(input, keys) {
-    this.subs.add(input);
-  }
-  unsubscribe(input) {
-    this.subs.delete(input);
+  unsubscribe(sub) {
+    this.subs.delete(sub);
   }
 }
