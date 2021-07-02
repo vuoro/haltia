@@ -3,11 +3,11 @@
 Experimental state manager. Extends `Map` and `Set`, making them reactive.
 
 ```js
-import { HaltiaMap, HaltiaSet } from "@vuoro/haltia";
+import { Map, Set } from "@vuoro/haltia";
 
 // These work just like native JS Map and Set
-const state = new HaltiaMap({ number: 0 });
-const list = new HaltiaSet();
+const state = new Map({ number: 0 });
+const list = new Set();
 
 // Except you can subscribe to them!
 state.subscribe((state) => {

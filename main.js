@@ -1,5 +1,8 @@
+const NativeMap = window.Map;
+const NativeSet = window.Set;
+
 const requestFunction = window.requestIdleCallback || window.requestAnimationFrame;
-const requests = new Set();
+const requests = new NativeSet();
 let current = null;
 const request = (input) => {
   if (input) {
@@ -15,7 +18,7 @@ const performRequest = () => {
   current = null;
 };
 
-export class HaltiaMap extends Map {
+export class Map extends NativeMap {
   constructor(input) {
     const seemsIterable = input != null && typeof input[Symbol.iterator] === "function";
     const maybeAnObject = typeof input === "object";
@@ -44,11 +47,11 @@ export class HaltiaMap extends Map {
     }
   }
 
-  subMap = new Map();
-  sizeSubs = new Set();
-  changedKeys = new Set();
-  queue = new Set();
-  subscriptions = new Map();
+  subMap = new NativeMap();
+  sizeSubs = new NativeSet();
+  changedKeys = new NativeSet();
+  queue = new NativeSet();
+  subscriptions = new NativeMap();
 
   subscribe(sub) {
     const actualThis = this;
@@ -59,12 +62,12 @@ export class HaltiaMap extends Map {
         return actualThis.size;
       },
       get: (key) => {
-        if (!actualThis.subMap.has(key)) actualThis.subMap.set(key, new Set());
+        if (!actualThis.subMap.has(key)) actualThis.subMap.set(key, new NativeSet());
         actualThis.subMap.get(key).add(sub);
         return actualThis.get(key);
       },
       has: (key) => {
-        if (!actualThis.subMap.has(key)) actualThis.subMap.set(key, new Set());
+        if (!actualThis.subMap.has(key)) actualThis.subMap.set(key, new NativeSet());
         actualThis.subMap.get(key).add(sub);
         return actualThis.has(key);
       },
@@ -114,7 +117,7 @@ export class HaltiaMap extends Map {
   };
 }
 
-export class HaltiaSet extends Set {
+export class Set extends NativeSet {
   add(value) {
     if (!this.has(value)) {
       super.add(value);
@@ -134,7 +137,7 @@ export class HaltiaSet extends Set {
     }
   }
 
-  subs = new Set();
+  subs = new NativeSet();
   callSubs = () => {
     for (const subscriber of this.subs) {
       subscriber(this);
