@@ -3,7 +3,7 @@
 Experimental state manager. Extends `Map` and `Set`, making them reactive.
 
 ```js
-import { HaltiaMap, HaltiaSet } from "./main.js";
+import { HaltiaMap, HaltiaSet } from "@vuoro/haltia";
 
 // These work just like native JS Map and Set
 const state = new HaltiaMap({ number: 0 });
