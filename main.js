@@ -15,7 +15,7 @@ const performRequest = () => {
   current = null;
 };
 
-export class ReactiveMap extends Map {
+export class HaltiaMap extends Map {
   constructor(input) {
     const seemsIterable = input != null && typeof input[Symbol.iterator] === "function";
     const maybeAnObject = typeof input === "object";
@@ -76,6 +76,8 @@ export class ReactiveMap extends Map {
 
     this.subscriptions.set(sub, subscription);
 
+    sub(subscription);
+
     return subscription;
   }
 
@@ -102,7 +104,7 @@ export class ReactiveMap extends Map {
   };
 }
 
-export class ReactiveSet extends Set {
+export class HaltiaSet extends Set {
   add(value) {
     if (!this.has(value)) {
       super.add(value);
@@ -131,6 +133,7 @@ export class ReactiveSet extends Set {
 
   subscribe(sub) {
     this.subs.add(sub);
+    sub(this);
     return this;
   }
   unsubscribe(sub) {

@@ -35,7 +35,9 @@
     "url": "git+https://github.com/vuoro/haltia.git"
   },
   "keywords": [
-    "state"
+    "state",
+    "react",
+    "reactive"
   ],
   "bugs": {
     "url": "https://github.com/vuoro/haltia/issues"

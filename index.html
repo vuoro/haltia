@@ -3,10 +3,10 @@
 <p id="setOutput">initial</p>
 
 <script type="module">
-  import { ReactiveMap, ReactiveSet } from "./main.js";
+  import { HaltiaMap, HaltiaSet } from "./main.js";
 
-  const store = new ReactiveMap({ number: 0 });
-  const set = new ReactiveSet();
+  const store = new HaltiaMap({ number: 0 });
+  const set = new HaltiaSet();
 
   // state.addEventListener((state) => {
   //   document.getElementById("output").innerText = state.get("number");
