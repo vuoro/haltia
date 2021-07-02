@@ -5,7 +5,7 @@ Experimental state manager. Extends `Map` and `Set`, making them reactive.
 ```js
 import { Map, Set } from "@vuoro/haltia";
 
-// These work just like native JS Map and Set
+// These work just like native JS Map and Set.
 const state = new Map({ number: 0 });
 const list = new Set();
 
@@ -42,6 +42,11 @@ export const useHaltia = (haltiaMapOrSet) => {
 
 const stateSubscription = useHaltia(state);
 stateSubscription.get("number"); // your hook will now re-render whenever `number` changes
+
+// One additional time-saver: the Haltia Map constructor allows object literals.
+// Simply because it's weird the native one doesn't!
+new Map(Object.entries({ hello: "world" })); // ugh
+new Map({ hello: "world" }); // nice!
 ```
 
 ## Contributors
