@@ -26,8 +26,10 @@ export class Map extends NativeMap {
   }
 
   set(key, value, forceUpdate = false) {
-    if (forceUpdate || this.get(key) !== value) {
-      super.set(key, value);
+    const valueMatches = this.get(key) === value;
+    super.set(key, value);
+
+    if (!valueMatches || forceUpdate) {
       this.changedKeys?.add(key);
       request(this.callSubs);
     }
