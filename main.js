@@ -25,10 +25,12 @@ export class Map extends NativeMap {
     super(seemsIterable ? input : maybeAnObject ? Object.entries(input) : input);
   }
 
-  set(key, value) {
-    super.set(key, value);
-    this.changedKeys?.add(key);
-    request(this.callSubs);
+  set(key, value, forceUpdate = false) {
+    if (forceUpdate || this.get(key) !== value) {
+      super.set(key, value);
+      this.changedKeys?.add(key);
+      request(this.callSubs);
+    }
   }
   delete(key) {
     if (this.has(key)) {
