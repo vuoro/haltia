@@ -54,66 +54,69 @@ export class Map extends NativeMap {
   subscriptions = new NativeMap();
 
   subscribe(sub) {
-    const actualThis = this;
+    const map = this;
+    const { subMap, sizeSubs, subscriptions } = map;
 
     const subscription = {
       get size() {
-        actualThis.sizeSubs.add(sub);
-        return actualThis.size;
+        map.sizeSubs.add(sub);
+        return map.size;
       },
       get: (key) => {
-        if (!actualThis.subMap.has(key)) actualThis.subMap.set(key, new NativeSet());
-        actualThis.subMap.get(key).add(sub);
-        return actualThis.get(key);
+        if (!subMap.has(key)) subMap.set(key, new NativeSet());
+        subMap.get(key).add(sub);
+        return map.get(key);
       },
       has: (key) => {
-        if (!actualThis.subMap.has(key)) actualThis.subMap.set(key, new NativeSet());
-        actualThis.subMap.get(key).add(sub);
-        return actualThis.has(key);
+        if (!subMap.has(key)) subMap.set(key, new NativeSet());
+        subMap.get(key).add(sub);
+        return map.has(key);
       },
-      set: (key, value) => actualThis.set(key, value),
-      delete: (key) => actualThis.delete(key),
-      clear: () => actualThis.clear(),
+      set: (key, value) => map.set(key, value),
+      delete: (key) => map.delete(key),
+      clear: () => map.clear(),
       unsubscribe: () => {
-        for (const [, subs] of actualThis.subMap) {
+        for (const [, subs] of subMap) {
           subs.delete(sub);
         }
-        actualThis.sizeSubs.delete(sub);
+        sizeSubs.delete(sub);
+        subscriptions.delete(sub);
       },
-      [Symbol.iterator]: () => actualThis[Symbol.iterator](),
-      keys: () => actualThis.keys(),
-      values: () => actualThis.values(),
-      entries: () => actualThis.entries(),
-      forEach: (callback, thisArg) => actualThis.forEach(callback, thisArg),
+      [Symbol.iterator]: () => map[Symbol.iterator](),
+      keys: () => map.keys(),
+      values: () => map.values(),
+      entries: () => map.entries(),
+      forEach: (callback, thisArg) => map.forEach(callback, thisArg),
     };
 
-    this.subscriptions.set(sub, subscription);
-
+    subscriptions.set(sub, subscription);
     sub(subscription);
 
     return subscription;
   }
 
   callSubs = () => {
-    for (const key of this.changedKeys) {
-      const subs = this.subMap.get(key);
+    const { changedKeys, subMap, sizeSubs, queue, subscriptions } = this;
+
+    for (const key of changedKeys) {
+      const subs = subMap.get(key);
       if (subs) {
         for (const sub of subs) {
-          this.queue.add(sub);
+          queue.add(sub);
         }
       }
     }
 
-    for (const sub of this.sizeSubs) {
-      this.queue.add(sub);
+    for (const sub of sizeSubs) {
+      queue.add(sub);
     }
 
-    for (const sub of this.queue) {
-      sub(this.subscriptions.get(sub));
+    for (const sub of queue) {
+      sub(subscriptions.get(sub));
     }
 
-    this.changedKeys.clear();
-    this.queue.clear();
+    changedKeys.clear();
+    queue.clear();
   };
 }
 
