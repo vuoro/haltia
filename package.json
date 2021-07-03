@@ -1,5 +1,5 @@
 {
-  "name": "haltia",
+  "name": "@vuoro/haltia",
   "version": "1.0.2",
   "main": "main.js",
   "exports": {
