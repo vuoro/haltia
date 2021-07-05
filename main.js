@@ -12,9 +12,9 @@ const request = (input) => {
 };
 const performRequest = () => {
   for (const callback of requests) {
+    requests.delete(callback);
     callback();
   }
-  requests.clear();
   current = null;
 };
 
@@ -104,6 +104,7 @@ export class Map extends NativeMap {
 
     for (const key of changedKeys) {
       const subs = subMap.get(key);
+      changedKeys.delete(key);
       if (subs) {
         for (const sub of subs) {
           queue.add(sub);
@@ -116,11 +117,9 @@ export class Map extends NativeMap {
     }
 
     for (const sub of queue) {
+      queue.delete(sub);
       sub(subscriptions.get(sub));
     }
-
-    changedKeys.clear();
-    queue.clear();
   };
 }
 
