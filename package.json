@@ -1,6 +1,6 @@
 {
   "name": "@vuoro/haltia",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "main": "main.js",
   "exports": {
     ".": "./main.js",
